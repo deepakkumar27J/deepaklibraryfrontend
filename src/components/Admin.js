@@ -16,7 +16,7 @@ export function GetAllStudents() {
     }
   
     useEffect(()=>{
-      fetch("http://localhost:8080/student/getAll")
+      fetch("http://localhost:8082/student/getAll")
       .then(res=>res.json())
       .then((result)=>{
         setStudents(result);
@@ -118,7 +118,7 @@ export function AllBorrowedBooks() {
     }
   
     useEffect(()=>{
-      fetch(`http://localhost:8080/book/allBorrowedBooks`)
+      fetch(`http://localhost:8082/book/allBorrowedBooks`)
       .then(res=>res.json())
       .then((result)=>{
         setBooks(result);
@@ -153,7 +153,7 @@ export function AllOverDueBooks() {
     }
   
     useEffect(()=>{
-      fetch(`http://localhost:8080/book/allOverDueBooks`)
+      fetch(`http://localhost:8082/book/allOverDueBooks`)
       .then(res=>res.json())
       .then((result)=>{
         setBooks(result);
@@ -188,7 +188,7 @@ export function AllBooks() {
     }
   
     useEffect(()=>{
-      fetch("http://localhost:8080/book/getAll")
+      fetch("http://localhost:8082/book/getAll")
       .then(res=>res.json())
       .then((result)=>{
         setBooks(result);
@@ -220,7 +220,7 @@ export function AddBook() {
     const handleClick=(e)=>{
       e.preventDefault()
       const book={bookName}
-      fetch("http://localhost:8080/book/create",{
+      fetch("http://localhost:8082/book/create",{
         method:"POST",
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify(book)

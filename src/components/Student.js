@@ -21,17 +21,23 @@ export function Student() {
     e.preventDefault()
     const student={emailId, password}
     console.log(student);
-    fetch("http://localhost:8080/student/login",{
+    fetch("http://localhost:8082/student/login",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify(student)
-    }).then((result)=>{
+    }).then(async (result)=>{
       console.log("Logged in", result.status);
       if(result.status ==200){
-        console.log("email------ ",student.emailId);
-        if(student.emailId=="admin")
+        const user = await result.json();
+        if(student.emailId=="admin"){
+          localStorage.setItem('emailId', user.emailId);
+          localStorage.setItem('id', user.id);
           navigate(`/admin/homepage`)
-        navigate(`/student/homepage`)
+        } else {
+          localStorage.setItem('emailId', user.emailId);
+          localStorage.setItem('id', user.id);
+          navigate(`/student/homepage`)
+        }
       }
       else 
         alert('Invalid Credentials')
@@ -44,7 +50,7 @@ export function Student() {
   }
 
   useEffect(()=>{
-    fetch("http://localhost:8080/student/getAll")
+    fetch("http://localhost:8082/student/getAll")
     .then(res=>res.json())
     .then((result)=>{
       setStudents(result);
@@ -73,7 +79,6 @@ export function Student() {
       />
       <Button variant="contained" onClick={handleClick}>Login</Button>
       <br></br>
-      <Link variant="out-lined" onClick={handleRegister}>Create Account</Link>
     </Box>
     </Paper>
     </Container>
@@ -97,10 +102,6 @@ export function StudentHome() {
   const handleReturn=(e)=>{
     e.preventDefault()
     navigate(`/student/return`)
-  }
-  const handleProfile=(e)=>{
-    e.preventDefault()
-    navigate(`/student/editProfile`)
   }
 
   return (
@@ -129,9 +130,6 @@ export function StudentHome() {
       <Paper square style={paperstyle} >
       <Button variant="contained" color='error' size='large' onClick={handleReturn}>Return Book</Button>
       </Paper>
-      <Paper square style={paperstyle} >
-      <Button variant="contained" size='large' onClick={handleProfile}>View Profile</Button>
-      </Paper>
     </Box>
     </Paper>
     </Container>
@@ -153,7 +151,7 @@ export function StudentRegister() {
     e.preventDefault()
     const student={emailId, password, firstName, lastName, phoneNumber, yearIntake, dob}
     console.log(student.dob);
-    fetch("http://localhost:8080/student/create",{
+    fetch("http://localhost:8082/student/create",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify(student)
@@ -231,7 +229,7 @@ export function UpdateStudent() {
       lastName: lastName
     }
     console.log(_student);
-    fetch("http://localhost:8080/student/updateProfile",{
+    fetch("http://localhost:8082/student/updateProfile",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify(_student)
@@ -242,7 +240,7 @@ export function UpdateStudent() {
 
   useEffect(()=>{
     const _student={emailId:"deepak6@deepak.com", password:"fsdgj"}
-    fetch("http://localhost:8080/student/login",{
+    fetch("http://localhost:8082/student/login",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify(_student)

@@ -1,5 +1,6 @@
 import './App.css';
 import Appbar from './components/Appbar';
+import LoggedInAppbar from './components/LoggedInAppbar';
 import {StudentRegister, UpdateStudent, Student, StudentHome} from './components/Student';
 import {Book, BookDetail} from './components/Book';
 import BorrowedBooks from './components/BorrowHistory';
@@ -10,22 +11,22 @@ import { AdminHome, GetAllStudents, AllBorrowedBooks, AllOverDueBooks, AllBooks,
 function App() {
   return (
     <div className="App">
-    <Appbar/>
+    {/* <Appbar/> */}
     <Routes>
-      <Route path='/' element={<Student/>}/>
-      <Route path='/student/borrwedHistory' element={<BorrowedBooks/>}/>
-      <Route path='/student/return' element={<ReturnBook/>}/>
-      <Route path='/student/books' element={<Book/>}/>
-      <Route path='/student/editProfile' element={<UpdateStudent/>}/>
-      <Route path='/student/homepage' element={<StudentHome/>}/>
+      <Route path='/' element={[<Appbar/>,<Student/>]}/>
+      <Route path='/student/borrwedHistory' element={[<LoggedInAppbar/>,<BorrowedBooks/>]}/>
+      <Route path='/student/return' element={[<LoggedInAppbar/>,<ReturnBook/>]}/>
+      <Route path='/student/books' element={[<LoggedInAppbar/>,<Book/>]}/>
+      <Route path='/student/editProfile' element={[<LoggedInAppbar/>,<UpdateStudent/>]}/>
+      <Route path='/student/homepage' element={[<LoggedInAppbar/>,<StudentHome/>]}/>
 
-      <Route path='/admin/students' element={<GetAllStudents/>}/>
-      <Route path='/admin/borrowedBooks' element={<AllBorrowedBooks/>}/>
-      <Route path='/admin/overDues' element={<AllOverDueBooks/>}/>
-      <Route path='/admin/books' element={<AllBooks/>}/>
+      <Route path='/admin/students' element={[<LoggedInAppbar/>,<GetAllStudents/>]}/>
+      <Route path='/admin/borrowedBooks' element={[<LoggedInAppbar/>,<AllBorrowedBooks/>]}/>
+      <Route path='/admin/overDues' element={[<LoggedInAppbar/>,<AllOverDueBooks/>]}/>
+      <Route path='/admin/books' element={[<LoggedInAppbar/>,<AllBooks/>]}/>
       {/* <Route path='/viewProfile' element={<Course/>}/> */}
-      <Route path='/admin/addBook' element={<AddBook/>}/>
-      <Route path='/admin/homepage' element={<AdminHome/>}/>
+      <Route path='/admin/addBook' element={[<LoggedInAppbar/>,<AddBook/>]}/>
+      <Route path='/admin/homepage' element={[<LoggedInAppbar/>,<AdminHome/>]}/>
     </Routes>
     </div>
   );

@@ -9,26 +9,30 @@ export function Book() {
 
   const navigate = useNavigate();
   const handleClick=(e)=>{
-    e.preventDefault()
-    const studentId = 1;
-    const bookId = 1;
+    const borrowDate = new Date();
+    const returnDate = new Date();
+    returnDate.setDate(returnDate.getDate()+20);
     const borrow = {
       student:{
-        studentId:studentId
+        studentId:localStorage.getItem('id')
       },
       book:{
-        bookId:bookId
+        bookId:localStorage.getItem('bookId')
       },
-      borrowDate:"2023-05-03",
-      returnDate:"2023-05-05",
+      borrowDate:borrowDate,
+      returnDate:returnDate,
       returnedDate:""
     }
-    fetch(`http://localhost:8080/book/borrowBook2/${studentId}/${bookId}`,{
+    fetch(`http://localhost:8082/book/borrowBook2/${localStorage.getItem('id')}/${localStorage.getItem('bookId')}`,{
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify(borrow)
-    }).then(()=>{
-      console.log("Book borrowed")
+    }).then(async (result)=>{
+      if(result.status==200){
+          alert('Successfully borrowed Book : '+localStorage.getItem('bookName'));
+      } else {
+        alert('Book is already borrowed by you.');
+      }
     })
   }
   const handleBack=(e)=>{
@@ -37,7 +41,7 @@ export function Book() {
   }
 
   useEffect(()=>{
-    fetch("http://localhost:8080/book/getAll")
+    fetch("http://localhost:8082/book/getAll")
     .then(res=>res.json())
     .then((result)=>{
       setBooks(result);
@@ -52,7 +56,11 @@ export function Book() {
         <Paper elevation={6} style={{margin:"10px",padding:"15px", textAlign:"left"}} key={book.bookId}>
           Id:{book.id}<br/>
           Name:{"  "+book.bookName}<br/>
-          <Button variant="contained" onClick={handleClick}>Borrow Book</Button>
+          <Button variant="contained" onClick={()=>{
+            localStorage.setItem('bookId', book.id)
+            localStorage.setItem('bookName', book.bookName)
+            handleClick()
+          }}>Borrow Book</Button>
           </Paper>
       ))}
       <Button variant="contained" size='large' onClick={handleBack}>Back</Button>
@@ -81,7 +89,7 @@ export function BookDetail() {
       returnDate:"1998-04-12",
       returnedDate:""
     }
-    fetch(`http://localhost:8080/book/borrowBook2/${studentId}/${bookId}`,{
+    fetch(`http://localhost:8082/book/borrowBook2/${studentId}/${bookId}`,{
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify(borrow)
@@ -91,7 +99,7 @@ export function BookDetail() {
   }
 
   useEffect(()=>{
-    fetch("http://localhost:8080/book/getBook"+"?id="+3)
+    fetch("http://localhost:8082/book/getBook"+"?id="+3)
     .then(res=>res.json())
     .then((result)=>{
       setBook(result);

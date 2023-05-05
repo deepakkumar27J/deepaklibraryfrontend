@@ -14,13 +14,10 @@ export default function BorrowedBooks() {
   }
 
   useEffect(()=>{
-    const studentId = 1;
-    fetch(`http://localhost:8080/book/borrowedBooks/${studentId}`)
+    fetch(`http://localhost:8082/book/borrowedBooks/${localStorage.getItem('id')}`)
     .then(res=>res.json())
     .then((result)=>{
       setBooks(result);
-      console.log("date------ ",moment(books[0].returnDate).isAfter(moment(new Date())))
-      console.log("date------ ",moment(books[1].returnDate).isAfter(moment(new Date())))
     }
     )
   },[])
@@ -30,6 +27,7 @@ export default function BorrowedBooks() {
     <Paper elevation={3} style={paperstyle}>
       {books.map(book=>(
         <Paper elevation={6} style={{margin:"10px",padding:"15px", textAlign:"left"}} key={book.id}>
+          ID:{"  "+book.book.id}<br/>
           Name:{"  "+book.book.bookName}<br/>
           borrowDate:{ " "+moment(new Date(book.borrowDate)).utc(false).format('DD-MM-YYYY')}<br/>
           returnDate:{ " "+moment(new Date(book.returnDate)).utc(false).format('DD-MM-YYYY')}<br/>

@@ -22,21 +22,38 @@ export default function ReturnBook() {
 
   const handleReturn=(e)=>{
     e.preventDefault()
-    const studentId=1;
-    const bookId = 1;
     const returnBook = {
       student:{
-        studentId:studentId
+        studentId:localStorage.getItem('id')
       },
       book:{
         bookId:bookId
       },
       returnedDate:moment(new Date())
     }
-    fetch(`http://localhost:8080/book/returnBook/${studentId}/${bookId}`,{
+    fetch(`http://localhost:8082/book/returnBook/${localStorage.getItem('id')}/${bookId}`,{
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify(returnBook)
+    }).then(async (result)=>{
+      if(result.status==200){
+      const returnBook = await result.json();
+      if(returnBook.already){
+        alert('You have already returned this book!');
+        return;
+      }
+      if(returnBook.return){
+        alert('You have successfully returned this book!');
+        return ;
+      }
+      else {
+        alert('Book returned late, an invoice is generated, here is your reference number : '+returnBook.reference+' Pay at http:localhost:3001');
+        return;
+      }}
+      else {
+        alert('Finance Service down, try again later.');
+        return;
+      }
     })
   }
 
